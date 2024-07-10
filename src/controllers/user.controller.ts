@@ -17,6 +17,7 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
+import {authenticate} from 'loopback4-authentication';
 import {User} from '../models';
 import {UserRepository} from '../repositories';
 
@@ -47,6 +48,7 @@ export class UserController {
     return this.userRepository.create(user);
   }
 
+  @authenticate('bearer')
   @get('/users/count')
   @response(200, {
     description: 'User model count',
@@ -58,6 +60,7 @@ export class UserController {
     return this.userRepository.count(where);
   }
 
+  @authenticate('bearer')
   @get('/users')
   @response(200, {
     description: 'Array of User model instances',
