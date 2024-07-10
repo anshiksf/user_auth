@@ -17,7 +17,8 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
-import {authenticate} from 'loopback4-authentication';
+import {authenticate, STRATEGY} from 'loopback4-authentication';
+import {authorize} from 'loopback4-authorization';
 import {User} from '../models';
 import {UserRepository} from '../repositories';
 
@@ -48,7 +49,12 @@ export class UserController {
     return this.userRepository.create(user);
   }
 
-  @authenticate('bearer')
+  @authenticate(STRATEGY.BEARER, {
+    passReqToCallback: true,
+  })
+  @authorize({
+    permissions: ['*'],
+  })
   @get('/users/count')
   @response(200, {
     description: 'User model count',
